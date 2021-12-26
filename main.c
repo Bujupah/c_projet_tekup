@@ -2,8 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 
-#include "database.c"
 #include "employe.c"
+#include "database.c"
 
 void cliHeader();
 void cliWelcome();
@@ -108,6 +108,16 @@ void cliReadOption(int *option) {
   scanf("%d", option);
 }
 
+void cliReadQuery(STRING query) {
+  printf("\n\n\t\tEntrer Votre query :--> ");
+  scanf("%s", query);
+}
+
+void cliReadQueryAsInt(int* query) {
+  printf("\n\n\t\tEntrer Votre query :--> ");
+  scanf("%d", query);
+}
+
 
 void cliAddEmploye() {
   char addNew = 'y';
@@ -166,35 +176,51 @@ void cliAddEmploye() {
   }
 }
 
-void cliShowAllEmploye() {
-  STRING* result;
-  select_all(result);
-}
-
-void cliShowEmployeById(int id) {
-  STRING buffer = malloc(sizeof(char)*BUFFER_SIZE);
-  select_by_id(2, buffer);
-  puts(buffer);
-}
-
-void cliDelEmploye() {}
-void cliEditEmploye() {}
-void cliGetAllEmploye() {
-  STRING buffer[BUFFER_SIZE];
-  select_all(buffer);
-}
-void cliSearchEmployeById() {
-  STRING buffer = malloc(sizeof(char)*BUFFER_SIZE);
-  select_by_id(4, buffer);
-  cliSpace('\t', 3);
-  puts(buffer);
+void cliDelEmploye() {
+  printf("Pas encore implementer\n");
   system("pause");
 }
-void cliSearchEmployeByName() {}
-void cliSearchEmployeByAdr() {}
-void cliSearchEmployeByDep() {}
-void cliSearchEmployeByMale() {}
-void cliSearchEmployeByFemale() {}
+void cliEditEmploye() {
+  printf("Pas encore implementer\n");
+  system("pause");
+}
+
+void cliGetAllEmploye() {
+  select_all();
+  system("pause");
+}
+void cliSearchEmployeById() {
+  int id;
+  cliReadQueryAsInt(&id);
+  select_by_id(id);
+  system("pause");
+}
+void cliSearchEmployeByName() {
+  STRING query = malloc(sizeof(char)*100);
+  cliReadQuery(query);
+  select_by_query(1, query);
+  system("pause");
+}
+void cliSearchEmployeByAdr() {
+    STRING query = malloc(sizeof(char)*100);
+  cliReadQuery(query);
+  select_by_query(7, query);
+  system("pause");
+}
+void cliSearchEmployeByDep() {
+  STRING query = malloc(sizeof(char)*100);
+  cliReadQuery(query);
+  select_by_query(6, query);
+  system("pause");
+}
+void cliSearchEmployeByMale() {
+  select_by_query(5, "M");
+  system("pause");
+}
+void cliSearchEmployeByFemale() {
+  select_by_query(5, "F");
+  system("pause");
+}
 void cliQuit() {
   printf("Au revoir");
   exit(0);

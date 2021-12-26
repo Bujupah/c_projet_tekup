@@ -10,6 +10,9 @@
 
 #define BUFFER_SIZE 1000
 
+void showEmploye(STRING*);
+void cliSpace(char, int);
+
 void _initDbHeader() {
     char* row = malloc(sizeof(char) * BUFFER_SIZE);
     sprintf(row, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
@@ -48,27 +51,71 @@ void get_col(STRING buffer, STRING* result) {
   }
 }
 
-void select_all(STRING* result) {
+void select_all() {
   DB db = fopen(EMPLOYEE_DB, "r");
-  int totalRead = 0;
+  char * buffer = 0;
+  long length;
 
-  int line = 0;
-  while(fgets(result[line], BUFFER_SIZE, db) != NULL) {
-    totalRead = strlen(result[line]);
-    result[line][totalRead - 1] = result[line][totalRead - 1] == '\n' ? '\0' : result[line][totalRead - 1];
-    line++;
+  if (db) {
+    fseek (db, 0, SEEK_END);
+    length = ftell (db);
+    fseek (db, 0, SEEK_SET);
+    buffer = malloc (length);
+    if (buffer) {
+      fread (buffer, 1, length, db);
+    }
+    fclose (db);
   }
 
+  STRING* columns = malloc(sizeof(char)*BUFFER_SIZE);
+  STRING row = malloc(sizeof(char)*BUFFER_SIZE);
+  if (buffer) {
+    printf("\t\t");
+    for (long i = 0; i < length; i++) {
+      if (*(buffer + i - 1) == '\n' || *(buffer + i - 1) == '\0') {
+        cliSpace('\n\t', 2);
+      }
+      printf("%c", *(buffer + i));
+    }
+    printf("\n");
+  }
+}
+
+void select_by_id(int id) {
+  DB db = fopen(EMPLOYEE_DB, "r");
+  int totalRead = 0;
+  STRING* columns = malloc(sizeof(char)*BUFFER_SIZE);
+  STRING row = malloc(sizeof(char)*BUFFER_SIZE);
+  
+  while(fgets(row, BUFFER_SIZE, db) != NULL) {
+    if (row[0] == 'I') continue;
+    totalRead = strlen(row);
+    row[totalRead - 1] = row[totalRead - 1] == '\n' ? '\0' : row[totalRead - 1];
+    get_col(row, columns);
+
+    int idAsInt = atoi(columns[0]);
+    if (id == idAsInt) {
+      showEmploye(columns);
+      break;
+    }
+
+  }
   fclose(db);
 }
 
-void select_by_id(int id, STRING result) {
+void select_by_query(int col, STRING query) {
   DB db = fopen(EMPLOYEE_DB, "r");
   int totalRead = 0;
-  while(fgets(result, BUFFER_SIZE, db) != NULL) {
-    totalRead = strlen(result);
-    result[totalRead - 1] = result[totalRead - 1] == '\n' ? '\0' : result[totalRead - 1];
-    if (id == get_id(result)) {
+  STRING* columns = malloc(sizeof(char)*BUFFER_SIZE);
+  STRING row = malloc(sizeof(char)*BUFFER_SIZE);
+  
+  while(fgets(row, BUFFER_SIZE, db) != NULL) {
+    if (row[0] == 'I') continue;
+    totalRead = strlen(row);
+    row[totalRead - 1] = row[totalRead - 1] == '\n' ? '\0' : row[totalRead - 1];
+    get_col(row, columns);
+    if (strcmp(columns[col], query) == 0) {
+      showEmploye(columns);
       break;
     }
   }

@@ -1,4 +1,6 @@
-#define EmployeStruct struct Employe;
+#define EMP struct Employe
+#define STRING char*
+#define BUFFER_SIZE 500
 
 struct Employe
 {
@@ -14,11 +16,11 @@ struct Employe
     char created_at[12];
 };
 
-STRING employeToCsvRow(struct Employe *emp) {
+STRING employeToCsvRow(EMP *emp) {
     STRING date = malloc(sizeof(char) * 100);
     current_date(date);
 
-    char* row = malloc(sizeof(char) * BUFFER_SIZE);
+    STRING row = malloc(sizeof(char) * BUFFER_SIZE);
     sprintf(row, "\n%d,%s,%s,%f,%s,%s,%s,%s,%s,%s", 
     (*emp).id, 
     (*emp).nom, 
@@ -33,27 +35,15 @@ STRING employeToCsvRow(struct Employe *emp) {
     return row;
 }
 
-// struct Employe* get_employee_by_id(int id) {
-//     STRING buffer = malloc(sizeof(char)*BUFFER_SIZE);
-//     select_by_id(2, buffer);
-
-//     struct Employe*employee = malloc(sizeof(struct Employe) * 1);
-//     (*employee).id = get_id(buffer);
-
-//     STRING* columns = malloc(sizeof(char)*BUFFER_SIZE);
-//     get_col(buffer, columns);
-
-//     // (*employee).id = get_id(buffer);
-//     // // (*employee).id = columns[1];
-//     // (*employee).nom = columns[2];
-//     // (*employee).poste = columns[3];
-//     // // (*employee).sal = columns[4];
-//     // (*employee).jdate = columns[5];
-//     // (*employee).sexe = columns[6];
-//     // (*employee).departement = columns[7];
-//     // (*employee).addr = columns[8];
-//     // (*employee).phone = columns[9];
-//     // (*employee).mail = columns[10];
-
-//     // return product;
-// }
+void showEmploye(STRING* columns) {
+    printf("\n\t\t\t ID: %s\n", columns[0]);
+    printf("\t\t\t Nom et prenom: %s\n", columns[1]);
+    printf("\t\t\t Poste: %s\n", columns[2]);
+    printf("\t\t\t Salaire: %s\n", columns[3]);
+    printf("\t\t\t Sexe: %s\n", columns[5]);
+    printf("\t\t\t Departement: %s\n", columns[6]);
+    printf("\t\t\t Adresse: %s\n", columns[7]);
+    printf("\t\t\t Telephone: %s\n", columns[8]);
+    printf("\t\t\t Email adresse: %s\n", columns[9]);
+    printf("\t\t\t Date de creation: %s\n", columns[4]);
+}
